@@ -1,8 +1,5 @@
 <?php
 
-require_once "Chapter.php";
-require_once "Episode.php";
-
 class Novel
 {
     public $title;
@@ -12,11 +9,9 @@ class Novel
     function __construct($title, $path){
         $this->title = $title;
         $this->path = $path;
-//        $this->separate_unified_text(1, $lines);
     }
 
     function separate_unified_text($ep_id, $lines){
-//        $ep_id = 1;
         $txt = "novels/" . $this->path . "/txts/" . $ep_id . ".txt";
         $chapters_txt = "novels/" . $this->path . "/chapters.txt";
         $subtitle_txt = "novels/" . $this->path . "/list.txt";
@@ -26,8 +21,6 @@ class Novel
         $br_regex = "/<Break(.*)\/>/i";
         for($i = 0; $i < count($lines); $i++){
             if(preg_match($br_regex, $lines[$i])){
-                echo "found BR: " . PHP_EOL;
-                var_dump($lines[$i]);
                 if($i < count($lines) - 1){
                     error_log($new_lines, 3, $txt);
                     $this->separate_unified_text(
@@ -36,9 +29,7 @@ class Novel
                     );
                     return;
                 }
-//                return $i < count($lines) - 1 ? $i + 1 : null;
             } else if(preg_match($chapter_regex, $lines[$i])){
-//                array_push($chapters, new Chapter($lines[$i]));
                 $chapter = preg_replace(
                     $chapter_regex,
                     "$1",
@@ -64,21 +55,7 @@ class Novel
                 );
             }
             $new_lines .= $lines[$i];
-//            error_log($lines[$i], 3, $txt);
         }
         error_log($new_lines, 3, $txt);
-//        foreach ($lines as $line){
-////            $title_regex = "/<Title>(.*)<\/Title>/i";
-//            $chapter_regex = "/<Chapter>(.*)<\/Chapter>/i";
-//            $br_regex = "/<Break(.*)\/>/i";
-//            if(preg_match($br_regex, $line)){
-//                break;
-//            } else if(preg_match($chapter_regex, $line)){
-//                array_push($chapters, new Chapter($line));
-////                error_log($msg . "\n", 3, $path);
-//            }
-//            $new_lines .= $line;
-//            $ep_id++;
-//        }
     }
 }

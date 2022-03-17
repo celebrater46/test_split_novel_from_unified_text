@@ -4,16 +4,7 @@ require_once "classes/Novel.php";
 
 $msg = "";
 $list = get_list();
-//var_dump($list);
 $results = check_unified_text($list);
-
-//function separate_unified_text($lines){
-//    foreach ($lines as $line){
-//        if(preg_match("/<Title>(.*)<\/Title>/i", $line)){
-//
-//        }
-//    }
-//}
 
 function check_unified_text($list){
     $results = [];
@@ -23,10 +14,8 @@ function check_unified_text($list){
             $lines = file($unified);
             $novel = new Novel($item["title"], $item["path"]);
             $novel->separate_unified_text(1, $lines);
-//            return "Separated: " . $unified . ".";
             array_push($results, "Separated: " . $unified . ".");
         } else {
-//            return "404 NOT FOUND: " . $unified . ".";
             array_push($results, "404 NOT FOUND: " . $unified . ".");
         }
     }
