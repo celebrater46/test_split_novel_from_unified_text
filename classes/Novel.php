@@ -17,22 +17,24 @@ class Novel
 
     function separate_unified_text($ep_id, $lines){
 //        $ep_id = 1;
-        $txt = __DIR__ . "novels/" . $this->path . "/txts/" . $ep_id . ".txt";
-        $chapters_txt = __DIR__ . "novels/" . $this->path . "/chapters.txt";
-        $subtitle_txt = __DIR__ . "novels/" . $this->path . "/list.txt";
+        $txt = "novels/" . $this->path . "/txts/" . $ep_id . ".txt";
+        $chapters_txt = "novels/" . $this->path . "/chapters.txt";
+        $subtitle_txt = "novels/" . $this->path . "/list.txt";
         $new_lines = "";
         $chapter_regex = "/<Chapter>(.*)<\/Chapter>/i";
         $subtitle_regex = "/<Sub>(.*)<\/Sub>/i";
         $br_regex = "/<Break(.*)\/>/i";
         for($i = 0; $i < count($lines); $i++){
             if(preg_match($br_regex, $lines[$i])){
+                echo "found BR: " . PHP_EOL;
+                var_dump($lines[$i]);
                 if($i < count($lines) - 1){
                     error_log($new_lines, 3, $txt);
                     $this->separate_unified_text(
                         $ep_id + 1,
                         array_slice($lines, $i + 1)
                     );
-                    break;
+                    return;
                 }
 //                return $i < count($lines) - 1 ? $i + 1 : null;
             } else if(preg_match($chapter_regex, $lines[$i])){
@@ -43,7 +45,7 @@ class Novel
                     $lines[$i]
                 );
                 error_log(
-                    $chapter . "\n",
+                    $chapter,
                     3,
                     $chapters_txt
                 );
@@ -56,7 +58,7 @@ class Novel
                 );
                 $str = count($this->chapters) . "|" . $ep_id . "|" . $subtitle;
                 error_log(
-                    $str . "\n",
+                    $str,
                     3,
                     $subtitle_txt
                 );
@@ -64,6 +66,7 @@ class Novel
             $new_lines .= $lines[$i];
 //            error_log($lines[$i], 3, $txt);
         }
+        error_log($new_lines, 3, $txt);
 //        foreach ($lines as $line){
 ////            $title_regex = "/<Title>(.*)<\/Title>/i";
 //            $chapter_regex = "/<Chapter>(.*)<\/Chapter>/i";

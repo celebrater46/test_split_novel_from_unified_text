@@ -1,8 +1,11 @@
 <?php
 
+require_once "classes/Novel.php";
+
 $msg = "";
 $list = get_list();
-$result = check_unified_text($list);
+//var_dump($list);
+$results = check_unified_text($list);
 
 //function separate_unified_text($lines){
 //    foreach ($lines as $line){
@@ -13,20 +16,21 @@ $result = check_unified_text($list);
 //}
 
 function check_unified_text($list){
-//    $results = [];
+    $results = [];
     foreach ($list as $item){
         $unified = "novels/" . $item["path"] . "/unified.txt";
         if(file_exists($unified)){
             $lines = file($unified);
             $novel = new Novel($item["title"], $item["path"]);
             $novel->separate_unified_text(1, $lines);
-            return "Separated: " . $unified . ".";
-//            array_push($results, "Separated: " . $unified . ".");
+//            return "Separated: " . $unified . ".";
+            array_push($results, "Separated: " . $unified . ".");
         } else {
-            return "404 NOT FOUND: " . $unified . ".";
-//            array_push($results, "404 NOT FOUND: " . $unified . ".");
+//            return "404 NOT FOUND: " . $unified . ".";
+            array_push($results, "404 NOT FOUND: " . $unified . ".");
         }
     }
+    return $results;
 }
 
 function get_list (){
@@ -36,21 +40,15 @@ function get_list (){
         $separated = [];
         foreach ($temp_array as $line){
             $temp = explode("|", $line);
-            $temp[1] = str_replace($temp[1], ["\r", "\n", "\r\n", " "], "");
+            $temp[1] = str_replace(["\r", "\n", "\r\n", " "], "", $temp[1]);
             array_push($separated, [
                 "title" => $temp[0],
                 "path" => $temp[1]
             ]);
         }
-        return [
-            "result" => true,
-            "array" => $separated
-        ];
+        return $separated;
     } else {
-        return [
-            "result" => false,
-            "array" => ["404 NOT FOUND: " . $list]
-        ];
+        return ["404 NOT FOUND: " . $list];
     }
 }
 
@@ -63,6 +61,6 @@ function get_list (){
 </head>
 <body>
     <h1>Result</h1>
-    <p><?php echo $result; ?></p>
+    <p><?php var_dump($results); ?></p>
 </body>
 </html>
