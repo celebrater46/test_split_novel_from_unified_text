@@ -2,22 +2,57 @@
 
 require_once "classes/Novel.php";
 
+$path = isset($_POST["path"]) ? $_POST["path"] : null;
 $msg = "";
 $list = get_list();
-$results = check_unified_text($list);
+$results = check_unified_text($list, $path);
 
-function check_unified_text($list){
+function delete_text($file){
+    $bool = unlink($file);
+    echo $bool ? "Deleted: " . $file : "Not deleted: " . $file;
+}
+
+function delete_texts($path){
+    $chapters = "novels/" . $path . "/chapters.txt";
+    $list = "novels/" . $path . "/list.txt";
+    delete_text($chapters);
+    delete_text($list);
+    foreach (glob("novels/" . $path . "/txts/*.txt") as $file) {
+        delete_text($file);
+    }
+}
+
+function separate_once($title, $path){
+    $unified = "novels/" . $path . "/unified.txt";
+    delete_texts($path);
+    if(file_exists($unified)){
+        $lines = file($unified);
+        $novel = new Novel($title, $path);
+        $novel->separate_unified_text(1, $lines);
+        return "Separated: " . $unified . ".";
+    } else {
+        return  "404 NOT FOUND: " . $unified . ".";
+    }
+}
+
+function check_unified_text($list, $path){
     $results = [];
-    foreach ($list as $item){
-        $unified = "novels/" . $item["path"] . "/unified.txt";
-        if(file_exists($unified)){
-            $lines = file($unified);
-            $novel = new Novel($item["title"], $item["path"]);
-            $novel->separate_unified_text(1, $lines);
-            array_push($results, "Separated: " . $unified . ".");
-        } else {
-            array_push($results, "404 NOT FOUND: " . $unified . ".");
+    if($path === null || $path === "all"){
+        foreach ($list as $item){
+            $result = separate_once($item["title"], $item["path"]);
+            array_push($results, $result);
+//            if(file_exists($unified)){
+//                $lines = file($unified);
+//                $novel = new Novel($item["title"], $item["path"]);
+//                $novel->separate_unified_text(1, $lines);
+//                array_push($results, "Separated: " . $unified . ".");
+//            } else {
+//                array_push($results, "404 NOT FOUND: " . $unified . ".");
+//            }
         }
+    } else {
+        $result = separate_once("Untitled", $path);
+        array_push($results, $result);
     }
     return $results;
 }
