@@ -5,7 +5,7 @@ require_once "classes/Novel.php";
 $path = isset($_POST["path"]) ? $_POST["path"] : null;
 $msg = "";
 $list = get_list();
-$results = check_unified_text($list, $path);
+check_unified_text($list, $path);
 
 function delete_text($file){
     if(file_exists($file)){
@@ -34,31 +34,33 @@ function separate_once($title, $path){
         $lines = file($unified);
         $novel = new Novel($title, $path);
         $novel->separate_unified_text(1, $lines);
-        return "Separated: " . $unified . ".";
+        echo "Separated: " . $unified . ".<br>";
+//        return "Separated: " . $unified . ".";
     } else {
-        return  "404 NOT FOUND: " . $unified . ".";
+        echo "404 NOT FOUND: " . $unified . ".<br>";
+//        return  "404 NOT FOUND: " . $unified . ".";
     }
 }
 
 function check_unified_text($list, $path){
-    $results = [];
+//    $results = [];
     if($path === null || $path === "all"){
         foreach ($list as $item){
-            $result = separate_once($item["title"], $item["path"]);
-            array_push($results, $result);
+            separate_once($item["title"], $item["path"]);
+//            array_push($results, $result);
         }
     } else {
-        $result = separate_once("Untitled", $path);
-        array_push($results, $result);
+        separate_once("Untitled", $path);
+//        array_push($results, $result);
     }
-    return $results;
+//    return $results;
 }
 
 function get_list (){
     $list = "novels/novels_list.txt";
+    $separated = [];
     if(file_exists($list)){
         $temp_array = file($list);
-        $separated = [];
         foreach ($temp_array as $line){
             $temp = explode("|", $line);
             $temp[1] = str_replace(["\r", "\n", "\r\n", " "], "", $temp[1]);
@@ -67,21 +69,13 @@ function get_list (){
                 "path" => $temp[1]
             ]);
         }
-        return $separated;
+        echo "Got: " . $list;
+        echo "<br>";
+//        return $separated;
     } else {
-        return ["404 NOT FOUND: " . $list];
+        echo "Not found: " . $list;
+//        return ["404 NOT FOUND: " . $list];
     }
+    return $separated;
 }
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Result</title>
-</head>
-<body>
-    <h1>Result</h1>
-    <p><?php var_dump($results); ?></p>
-</body>
-</html>
