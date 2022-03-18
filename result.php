@@ -35,25 +35,19 @@ function separate_once($title, $path){
         $novel = new Novel($title, $path);
         $novel->separate_unified_text(1, $lines);
         echo "Separated: " . $unified . ".<br>";
-//        return "Separated: " . $unified . ".";
     } else {
         echo "404 NOT FOUND: " . $unified . ".<br>";
-//        return  "404 NOT FOUND: " . $unified . ".";
     }
 }
 
 function check_unified_text($list, $path){
-//    $results = [];
     if($path === null || $path === "all"){
         foreach ($list as $item){
             separate_once($item["title"], $item["path"]);
-//            array_push($results, $result);
         }
     } else {
         separate_once("Untitled", $path);
-//        array_push($results, $result);
     }
-//    return $results;
 }
 
 function get_list (){
@@ -71,10 +65,8 @@ function get_list (){
         }
         echo "Got: " . $list;
         echo "<br>";
-//        return $separated;
     } else {
         echo "Not found: " . $list;
-//        return ["404 NOT FOUND: " . $list];
     }
     return $separated;
 }
