@@ -10,7 +10,7 @@
 <body>
     <h1>Test Split Novel From Unified Text</h1>
 <!--    <a href="result.php">Split!</a>-->
-    <form action="result" method="post">
+    <form action="result.php" method="post">
         <label for="name">Path: </label>
         <input type="text" id="path" name="path" size="9" />
         <input type="submit" value="Split!" />

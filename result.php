@@ -8,8 +8,13 @@ $list = get_list();
 $results = check_unified_text($list, $path);
 
 function delete_text($file){
-    $bool = unlink($file);
-    echo $bool ? "Deleted: " . $file : "Not deleted: " . $file;
+    if(file_exists($file)){
+        $bool = unlink($file);
+        echo $bool ? "Deleted: " . $file : "Not deleted: " . $file;
+        echo "<br>";
+    } else {
+        echo "Not found: " . $file . "<br>";
+    }
 }
 
 function delete_texts($path){
