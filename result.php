@@ -46,14 +46,6 @@ function check_unified_text($list, $path){
         foreach ($list as $item){
             $result = separate_once($item["title"], $item["path"]);
             array_push($results, $result);
-//            if(file_exists($unified)){
-//                $lines = file($unified);
-//                $novel = new Novel($item["title"], $item["path"]);
-//                $novel->separate_unified_text(1, $lines);
-//                array_push($results, "Separated: " . $unified . ".");
-//            } else {
-//                array_push($results, "404 NOT FOUND: " . $unified . ".");
-//            }
         }
     } else {
         $result = separate_once("Untitled", $path);
