@@ -1,6 +1,6 @@
 <?php
 
-class Novel
+class Separator
 {
     public $title;
     public $path;

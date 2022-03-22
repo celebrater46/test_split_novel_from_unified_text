@@ -1,6 +1,6 @@
 <?php
 
-require_once "classes/Novel.php";
+require_once "classes/Separator.php";
 
 $path = isset($_POST["path"]) ? $_POST["path"] : null;
 $msg = "";
@@ -32,7 +32,7 @@ function separate_once($title, $path){
     delete_texts($path);
     if(file_exists($unified)){
         $lines = file($unified);
-        $novel = new Novel($title, $path);
+        $novel = new Separator($title, $path);
         $novel->separate_unified_text(1, $lines);
         echo "Separated: " . $unified . ".<br>";
     } else {
